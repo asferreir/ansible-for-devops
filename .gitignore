@@ -1,0 +1,6 @@
+# Vagrant stuff
+/.vagrant
+/website/.vagrant
+/website/build
+/vagrant-spec.config.rb
+test/vagrant-spec/.vagrant/
