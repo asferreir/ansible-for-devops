@@ -1,0 +1,59 @@
+---
+- hosts: nodejs
+  become: yes
+
+  vars:
+    - node_apps_location: /usr/local/opt/node/app
+
+  tasks:
+
+  - name: Instalando EPEL repo.
+    yum:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+      state: present
+
+  - name: Importando EPEL GPG key.
+    rpm_key:
+      key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}
+      state: present
+
+  - name: Instalando remi repo.
+    yum:
+      name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
+      state: present
+
+  - name: Importando remi GPG key.
+    rpm_key:
+      key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+      state: present
+
+  - name: Instalando Node.js e npm a partir Epel repo
+    yum:
+      name: npm
+      enablerepo: epel
+      state: present
+
+  - name: Instalando ultima versão do Forever globalmente
+    npm:
+      name: forever
+      state: latest
+      global: yes
+
+  - name: Assegura Node.js app folder exists.
+    file: "path={{ node_apps_location }} state=directory"
+
+  - name: Copiando example Node.js app to server.
+    copy: "src=app dest={{ node_apps_location }}"
+
+  - name: Instalando app dependencies definidas no package.json.
+    npm:
+      path: "{{ node_apps_location }}/app"
+
+  - name: Checklist of running Node.js apps
+    command: forever list
+    register: forever_list
+    changed_when: false
+
+  - name: Inicia example Node.js app.
+    command: "forever start {{ node_apps_location }}/app/app.js"
+    when: "forever_list.stdout.find('{{ node_apps_location }}/app/app.js') == -1"

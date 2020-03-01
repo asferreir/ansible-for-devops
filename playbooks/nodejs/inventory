@@ -1,0 +1,13 @@
+[nodejs]
+192.168.57.11
+
+[lamp]
+192.168.57.12
+
+[db]
+192.168.57.13
+
+[all:children]
+nodejs
+lamp
+db
