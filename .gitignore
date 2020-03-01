@@ -1,6 +1,7 @@
 # Vagrant stuff
-/.vagrant
+*.vagrant
 /website/.vagrant
 /website/build
 /vagrant-spec.config.rb
 test/vagrant-spec/.vagrant/
+nodejs/.vagrant/rgloader/loader.rb
