@@ -1,0 +1,24 @@
+---
+- hosts: solr
+  become: yes
+
+  vars_files:
+  - vars.yml
+
+  pre_tasks:
+    - name: Atualiza o apt cache se necessario.
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+  handlers:
+    - name: restart tomcat
+      service: name=tomcat7 state=restarted
+
+  tasks:
+    - name: Install Tomcat 8
+      apt: name={{ item }} update_cache=yes state=latest
+      loop: [ 'tomcat8', 'tomcat8-admin' ]
+
+    - name: Ensure Tomcat 8 is started and enabled on boot.
+      service: name=tomcat8 state=started enabled=yes
