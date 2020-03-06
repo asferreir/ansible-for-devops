@@ -1,0 +1,7 @@
+---
+# Usuario que o Ansible ira utilizar para conexão.
+ansible_user: vagrant
+# Senha do usuario
+ansible_password: vagrant
+ansible_python_interpreter: /usr/libexec/platform-python
+node_apps_location: /usr/local/opt/node

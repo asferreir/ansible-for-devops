@@ -1,0 +1,7 @@
+[drupal]
+192.168.57.12
+
+[drupal:vars]
+ansible_user=vagrant
+ansible_password=vagrant
+ansible_python_interpreter=/usr/bin/python3

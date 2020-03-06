@@ -1,0 +1,12 @@
+---
+- name: Install Node.js
+  yum:
+    name: npm
+    enablerepo: epel
+    state: present
+
+- name: Install forever module (to run our Node.js app).
+  npm:
+    name: forever
+    state: latest
+    global: yes

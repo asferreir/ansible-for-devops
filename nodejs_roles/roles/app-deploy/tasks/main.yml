@@ -1,0 +1,19 @@
+---
+- name: Assegura Node.js app folder exists.
+  file: "path={{ node_apps_location }} state=directory"
+
+- name: Copiando example Node.js app to server.
+  copy: "src=app dest={{ node_apps_location }}"
+
+- name: Instalando app dependencies definidas no package.json.
+  npm:
+    path: "{{ node_apps_location }}/app"
+
+- name: Checklist of running Node.js apps
+  command: forever list
+  register: forever_list
+  changed_when: false
+
+- name: Inicia example Node.js app.
+  command: "forever start {{ node_apps_location }}/app/app.js"
+  when: "forever_list.stdout.find('{{ node_apps_location }}/app/app.js') == -1"

@@ -1,0 +1,10 @@
+---
+- name: Install LAMP Packages and pre-req
+  apt: name={{ item }} update_cache=yes state=latest
+  loop: [ 'apache2', 'mysql-server', 'python3-pymysql', 'php', 'php-mysql', 'libapache2-mod-php', 'php-mbstring', 'php-xml', 'php-gd', 'php-curl', 'python-pycurl', 'python-apt']
+
+- name: "Start Apache, MySQL, and PHP."
+  service: "name={{ item }} state=started enabled=yes"
+  with_items:
+      - apache2
+      - mysql

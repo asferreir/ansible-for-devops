@@ -1,0 +1,28 @@
+---
+# Handler showing how to clean yum metadata cache
+- name: yum-clean-metadata
+  command: yum clean metadata
+  args:
+    warn: no
+
+- name: Removendo CentOS-AppStream repo
+  yum_repository:
+    name: AppStream
+    state: absent
+  notify: yum-clean-metadata
+
+- name: Instalando EPEL repo.
+  yum:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-{{ ansible_distribution_major_version }}.noarch.rpm
+    validate_certs: false
+    state: present
+
+- name: Instalando remi repo.
+  yum:
+    name: http://rpms.famillecollet.com/enterprise/remi-release-{{ ansible_distribution_major_version }}.rpm
+    state: present
+
+- name: Importando remi GPG key.
+  rpm_key:
+    key: http://rpms.remirepo.net/RPM-GPG-KEY-remi
+    state: present
